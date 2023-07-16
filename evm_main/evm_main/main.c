@@ -174,7 +174,7 @@ int main(void)
 	KEY_PIN=0xff;
 	while (1)
 	{
-		if((PINB&(1<<3))==0)
+		if((PINB&(1<<CU_READY))==0)
 		{
 			accept_votes();
 			_delay_us(1000000);
@@ -198,6 +198,15 @@ int main(void)
 			_delay_us(4000000);
 			lcdCommand(0x01);
 			
+		}
+		else if((PINB&(1<<CU_CLEAR))==0)
+		{
+			lcd_print("Clear");
+			_delay_us(4000000);
+			c1=0;
+			c2=0;
+			c3=0;
+			lcdCommand(0x01);
 		}
 		else
 		{
