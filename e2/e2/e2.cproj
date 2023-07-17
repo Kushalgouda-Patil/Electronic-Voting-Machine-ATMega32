@@ -12,9 +12,9 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>evm_main</AssemblyName>
-    <Name>evm_main</Name>
-    <RootNamespace>evm_main</RootNamespace>
+    <AssemblyName>e2</AssemblyName>
+    <Name>e2</Name>
+    <RootNamespace>e2</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>

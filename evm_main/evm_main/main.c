@@ -16,7 +16,7 @@
 #define CU_READY 3
 
 
-#define LCD_RS 5
+#define LCD_RS 0
 #define LCD_RW 6
 #define LCD_EN 7
 
@@ -142,23 +142,31 @@ void accept_votes()
 	if(ch=='1')
 	{
 		++c1;
+		lcdData(ch);
+		_delay_ms(1000);
 		lcdCommand(0x01);
 		return;
 	}
 	else if(ch=='2')
 	{
 		++c2;
+		lcdData(ch);
+		_delay_ms(1000);
 		lcdCommand(0x01);
 		return;
 	}
 	else if(ch=='3')
 	{
 		++c3;
+		lcdData(ch);
+		_delay_ms(1000);
 		lcdCommand(0x01);
 		return;
 	}
 	else
 	{
+		lcdData(ch);
+		_delay_ms(1000);
 		lcdCommand(0x01);
 		return;
 	}
@@ -169,6 +177,8 @@ int main(void)
 	c1=0;c2=0;c3=0;
 	lcd_init();
 	CU_DDDR=0x00;
+	lcd_print("HI");
+	_delay_ms(1000);
 	lcdCommand(0X80);
 	CU_PIN=0xff;
 	KEY_PIN=0xff;
@@ -177,7 +187,7 @@ int main(void)
 		if((PINB&(1<<CU_READY))==0)
 		{
 			accept_votes();
-			_delay_us(1000000);
+			
 		}
 		else if((PINB&(1<<CU_RESULT))==0)
 		{
@@ -185,7 +195,17 @@ int main(void)
 			itoa(c1,str,10);
 			lcd_print("Candidate 1: ");
 			lcd_print(str);
-			_delay_us(4000000);
+			_delay_ms(1000);
+			lcdCommand(0x01);
+			itoa(c2,str,10);
+			lcd_print(" Candidate 2: ");
+			lcd_print(str);
+			_delay_ms(1000);
+			lcdCommand(0x01);
+			itoa(c3,str,10);
+			lcd_print(" Candidate 3: ");
+			lcd_print(str);
+			_delay_ms(1000);
 			lcdCommand(0x01);
 		}
 		else if((PINB&(1<<CU_TOTAL))==0)
@@ -195,14 +215,14 @@ int main(void)
 			itoa(total,str,10);
 			lcd_print("Total ");
 			lcd_print(str);
-			_delay_us(4000000);
+			_delay_ms(1000);
 			lcdCommand(0x01);
 			
 		}
 		else if((PINB&(1<<CU_CLEAR))==0)
 		{
 			lcd_print("Clear");
-			_delay_us(4000000);
+			_delay_ms(1000);
 			c1=0;
 			c2=0;
 			c3=0;
@@ -214,7 +234,6 @@ int main(void)
 			continue;
 		}
 		
-	
+		
 	}
 }
-
