@@ -25,8 +25,8 @@
 #define KEY_PRT PORTA //keyboard PORT
 #define KEY_DDR DDRA //keyboard DDR
 #define KEY_PIN PINA
-unsigned char keypad[4][4] ={ {'4','7','9','/'},{'5','8','6','*'},{'1','2','3','-'},{' ','0','=','+'}};
-//unsigned char keypad[4][4] ={ {'7','8','9','/'},{'1','4','7','*'},{'2','5','8','0'},{' ','6','9','#'}};
+//unsigned char keypad[4][4] ={ {'4','7','9','/'},{'5','8','6','*'},{'1','2','3','-'},{' ','0','=','+'}};
+unsigned char keypad[4][4] ={ {'A','B','C','D'},{'1','4','7','*'},{'2','5','8','0'},{'3','6','9','#'}};
 
 void lcdCommand( unsigned char cmnd )
 {
@@ -154,16 +154,17 @@ char keyfind()
 		}
 	}
 }
-int c1,c2,c3,c4;
+int c1,c2,c3;
 void accept_votes()
 {
-	lcd_print("Ready");
+	lcdCommand(0x01);
+	lcd_print(" Ready");
 	unsigned char ch=keyfind();
 	if(ch=='1')
 	{
 		++c1;
 		lcdData(ch);
-		_delay_ms(1000);
+		_delay_ms(500);
 		lcdCommand(0x01);
 		return;
 	}
@@ -171,7 +172,7 @@ void accept_votes()
 	{
 		++c2;
 		lcdData(ch);
-		_delay_ms(1000);
+		_delay_ms(500);
 		lcdCommand(0x01);
 		return;
 	}
@@ -179,14 +180,14 @@ void accept_votes()
 	{
 		++c3;
 		lcdData(ch);
-		_delay_ms(1000);
+		_delay_ms(500);
 		lcdCommand(0x01);
 		return;
 	}
 	else
 	{
 		lcdData(ch);
-		_delay_ms(1000);
+		_delay_ms(500);
 		lcdCommand(0x01);
 		return;
 	}
@@ -195,12 +196,26 @@ void accept_votes()
 
 int main(void)
 {
-	c1=0;c2=0;c3=0,c4=0;
+	c1=0;c2=0;c3=0;
 	button_init();
 	lcd_init();
-	lcd_print("HI...");
-	_delay_ms(1000);
-	lcdCommand(0X80);
+	lcd_print("___EVM___");
+	_delay_ms(100);
+	lcdCommand(0x01);
+	lcdCommand(0X81);
+	lcd_print("___EVM___");
+	_delay_ms(100);
+	lcdCommand(0x01);
+	lcdCommand(0X82);
+	lcd_print("___EVM___");
+	_delay_ms(100);
+	lcdCommand(0x01);
+	lcdCommand(0X83);
+	lcd_print("___EVM___");
+	_delay_ms(100);
+	lcdCommand(0x01);
+	_delay_ms(500);
+	lcd_print("Hi");
 	
 	
 	
@@ -219,33 +234,55 @@ int main(void)
 		*/
 		if(button_num==1)
 		{
+			lcdCommand(0x01);
 			accept_votes();
+			lcd_print(" Vote accepted");
 			
 		}
 		else if(button_num==2)
 		{
+			lcdCommand(0x01);
 			char str[20];
 			itoa(c1,str,10);
-			lcd_print("Candidate 1: ");
+			lcd_print(" Candidate 1: ");
 			lcd_print(str);
-			_delay_ms(1000);
+			_delay_ms(500);
 			lcdCommand(0x01);
 			itoa(c2,str,10);
 			lcd_print(" Candidate 2: ");
 			lcd_print(str);
-			_delay_ms(1000);
+			_delay_ms(500);
 			lcdCommand(0x01);
 			itoa(c3,str,10);
 			lcd_print(" Candidate 3: ");
 			lcd_print(str);
-			_delay_ms(1000);
+			_delay_ms(500);
 			lcdCommand(0x01);
 			if(c1>c2 && c1>c3)
 			{
 				lcd_print(" WINNER :");
 				lcdCommand(0xC0);
 				lcd_print(" Candidate 1!!");
-				_delay_ms(1000);
+				_delay_ms(500);
+				lcdCommand(0x01);
+			}
+			
+			
+			else if(c2>c3 && c2> c1)
+			{
+				lcd_print(" WINNER :");
+				lcdCommand(0xC0);
+				lcd_print(" Candidate 2!!");
+				_delay_ms(500);
+				lcdCommand(0x01);
+			}
+			
+			else if(c3>c2 && c3>c1)
+			{
+				lcd_print(" WINNER :");
+				lcdCommand(0xC0);
+				lcd_print(" Candidate 3!!");
+				_delay_ms(500);
 				lcdCommand(0x01);
 			}
 			else if(c1==c2 && c2==c3)
@@ -253,7 +290,7 @@ int main(void)
 				lcd_print(" WINNER :");
 				lcdCommand(0xC0);
 				lcd_print(" Candidate 1,2&3!!");
-				_delay_ms(1000);
+				_delay_ms(500);
 				lcdCommand(0x01);
 			}
 			else if(c1==c2)
@@ -261,7 +298,7 @@ int main(void)
 				lcd_print(" WINNER :");
 				lcdCommand(0xC0);
 				lcd_print(" Candidate 1 & 2!!");
-				_delay_ms(1000);
+				_delay_ms(500);
 				lcdCommand(0x01);
 			}
 			else if(c1==c3)
@@ -269,51 +306,41 @@ int main(void)
 				lcd_print(" WINNER :");
 				lcdCommand(0xC0);
 				lcd_print(" Candidate 1 & 3!!");
-				_delay_ms(1000);
+				_delay_ms(500);
 				lcdCommand(0x01);
 			}
 			else if(c2==c3)
 			{
-				lcd_print("WINNER :");
-				lcdCommand(0xC0);
-				lcd_print(" Candidate 2 & 3!!");
-				_delay_ms(1000);
-				lcdCommand(0x01);
-			}
-			else if(c2>c3)
-			{
 				lcd_print(" WINNER :");
 				lcdCommand(0xC0);
-				lcd_print(" Candidate 2!!");
-				_delay_ms(1000);
+				lcd_print(" Candidate 2 & 3!!");
+				_delay_ms(500);
 				lcdCommand(0x01);
 			}
 			else
 			{
-				lcd_print(" WINNER :");
-				lcdCommand(0xC0);
-				lcd_print(" Candidate 3!!");
-				_delay_ms(1000);
-				lcdCommand(0x01);
+				continue;
 			}
 		}
 		else if(button_num==3)
 		{
+			lcdCommand(0x01);
 			int total=c1+c2+c3;
 			char str[20];
 			itoa(total,str,10);
-			lcd_print("Total= ");
+			lcd_print(" Total Votes= ");
 			lcd_print(str);
-			_delay_ms(1000);
+			_delay_ms(500);
 			lcdCommand(0x01);
-			lcd_print(str);
+			
 			
 			
 		}
 		else if(button_num==4)
 		{
-			lcd_print("Clear...");
-			_delay_ms(1000);
+			lcdCommand(0x01);
+			lcd_print(" Clear...");
+			_delay_ms(500);
 			c1=0;
 			c2=0;
 			c3=0;
